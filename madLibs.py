@@ -5,7 +5,7 @@
 import re
 import os
 
-os.chdir(r'C:\Users\Callum\Documents\Code\MyPythonScripts\madLibs')
+os.chdir('madLibs')
 
 while True:
     print('Choose a mad lib:')
