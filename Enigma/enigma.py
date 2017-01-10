@@ -158,48 +158,47 @@ class enigma:
         # Start position, lmr = left, middle, right
         left, middle, right = enigma.lmr[0], enigma.lmr[1], enigma.lmr[2]
 
-        while True:
-            print(ab_list[left], ab_list[middle], ab_list[right])
+        print(ab_list[left], ab_list[middle], ab_list[right])
 
-            # Increment rotor position
-            right += 1
-            if right > 25:
-                right = 0
-            elif right == r_rotor['notch']:
-                middle += 1
-            if middle > 25:
-                middle = 0
-            elif middle == (m_rotor['notch'] - 1) and right == (
-                    r_rotor['notch'] + 1):
-                middle += 1
-                left += 1
-            if left > 25:
-                left = 0
+        # Increment rotor position
+        right += 1
+        if right > 25:
+            right = 0
+        elif right == r_rotor['notch']:
+            middle += 1
+        if middle > 25:
+            middle = 0
+        elif middle == (m_rotor['notch'] - 1) and right == (
+                r_rotor['notch'] + 1):
+            middle += 1
+            left += 1
+        if left > 25:
+            left = 0
 
-            enigma.lmr[0], enigma.lmr[1], enigma.lmr[2] = left, middle, right
+        enigma.lmr[0], enigma.lmr[1], enigma.lmr[2] = left, middle, right
 
-            # encode character
-            # Subtraction compensates for the previous rotor's rotation
-            # relative to the rotor being used.
-            r_rotor_out = enigma.rotor_io(keypress, right, r_rotor)
+        # encode character
+        # Subtraction compensates for the previous rotor's rotation
+        # relative to the rotor being used.
+        r_rotor_out = enigma.rotor_io(keypress, right, r_rotor)
 
-            m_rotor_out = enigma.rotor_io(r_rotor_out, middle - right, m_rotor)
+        m_rotor_out = enigma.rotor_io(r_rotor_out, middle - right, m_rotor)
 
-            l_rotor_out = enigma.rotor_io(m_rotor_out, left - middle, l_rotor)
+        l_rotor_out = enigma.rotor_io(m_rotor_out, left - middle, l_rotor)
 
-            reflector_out = enigma.rotor_io(l_rotor_out, -left, reflector)
+        reflector_out = enigma.rotor_io(l_rotor_out, -left, reflector)
 
-            l_rotor_out = enigma.rotor_io(reflector_out, left, rf_l_rotor)
+        l_rotor_out = enigma.rotor_io(reflector_out, left, rf_l_rotor)
 
-            m_rotor_out = enigma.rotor_io(
-                l_rotor_out, middle - left, rf_m_rotor)
+        m_rotor_out = enigma.rotor_io(
+            l_rotor_out, middle - left, rf_m_rotor)
 
-            r_rotor_out = enigma.rotor_io(
-                m_rotor_out, right - middle, rf_r_rotor)
+        r_rotor_out = enigma.rotor_io(
+            m_rotor_out, right - middle, rf_r_rotor)
 
-            rotor_encode_out = ab_list[ab_list.index(r_rotor_out) - right]
-            enigma.rotor_encode_out = rotor_encode_out
-            return enigma.rotor_encode_out
+        rotor_encode_out = ab_list[ab_list.index(r_rotor_out) - right]
+        enigma.rotor_encode_out = rotor_encode_out
+        return enigma.rotor_encode_out
 
     def ch_input():
         '''Returns only valid input characters'''
