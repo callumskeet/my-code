@@ -28,6 +28,8 @@ def make_db(pardir, subdir, database={}):
 
 # Alphabet
 ab_list = list(string.ascii_uppercase)
+rev_ab_list = list(string.ascii_uppercase)
+rev_ab_list.reverse()
 
 # Rotor database
 database = make_db('data', 'reflectors')
