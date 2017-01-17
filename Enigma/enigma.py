@@ -1,5 +1,5 @@
-#! python3
-# Credit to reddit user /u/tangerinelion for their advice 
+#!python3
+# Credit to reddit user /u/tangerinelion for their advice
 import re
 import database
 
@@ -12,7 +12,7 @@ class enigma:
         """
         Ensures the Enigma machine has all settings
         configured for operation
-        """ 
+        """
         print('Default Configuration:\n'
               '\tModel: M3\n\tRotors (left-right): I, II, III\n'
               '\tReflector: B\n\tRing Setting: AAA\n\tGround Setting: AAZ\n'
@@ -38,7 +38,7 @@ class enigma:
         ring_offset = database.ab_list.index(ring_offset)
         rotor = self.kv_swap(notched_rotor)
         for lttr_no in range(len(database.ab_list)):
-            new_pos = lttr_no - ring_offset
+            new_pos = lttr_no + ring_offset
             if new_pos > 25 or new_pos < 0:
                 new_pos %= 26
             new_keys += rotor[database.ab_list[new_pos]]
@@ -71,17 +71,12 @@ class enigma:
         models = list(rotor_db.keys())
 
         if defaults:
-            # self.rotors = rotor_db['M3']['I'],
-            # self.rotors += self.kv_swap(rotor_db['M3']['I']),
-            # self.rotors += rotor_db['M3']['II'],
-            # self.rotors += self.kv_swap(rotor_db['M3']['II']),
-            # self.rotors += rotor_db['M3']['III'],
-            # self.rotors += self.kv_swap(rotor_db['M3']['III']),
-            # self.rotors += rotor_db['M3']['reflectors']['B'],
-
-            self.rotors = (rotor_db['M3']['I'], self.kv_swap(rotor_db['M3']['I'])),
-            self.rotors += (rotor_db['M3']['II'], self.kv_swap(rotor_db['M3']['II'])),
-            self.rotors += (rotor_db['M3']['III'], self.kv_swap(rotor_db['M3']['III'])),
+            self.rotors = (rotor_db['M3']['I'],
+                           self.kv_swap(rotor_db['M3']['I'])),
+            self.rotors += (rotor_db['M3']['II'],
+                            self.kv_swap(rotor_db['M3']['II'])),
+            self.rotors += (rotor_db['M3']['III'],
+                            self.kv_swap(rotor_db['M3']['III'])),
             self.rotors += rotor_db['M3']['reflectors']['B'],
 
         else:
@@ -103,14 +98,6 @@ class enigma:
 
             print('Select a reflector: %s' % ', '.join(reflectors))
             reflector = reflectors[input('Reflector: ').upper()]
-
-            # Generate reverse wiring path
-            # rf_l_rotor = self.kv_swap(l_rotor)
-            # rf_m_rotor = self.kv_swap(m_rotor)
-            # rf_r_rotor = self.kv_swap(r_rotor)
-
-            # self.rotors = l_rotor, m_rotor, r_rotor, reflector
-            # self.rotors += rf_l_rotor, rf_m_rotor, rf_r_rotor
 
             self.rotors = l_pair, m_pair, r_pair, reflector
 
@@ -236,7 +223,8 @@ class enigma:
         r_rotor_out = self.rotor_io(
             m_rotor_out, right - middle, rf_r_rotor)
 
-        rotor_encode_out = database.ab_list[database.ab_list.index(r_rotor_out) - right]
+        rotor_encode_out = database.ab_list[
+            database.ab_list.index(r_rotor_out) - right]
         self.rotor_encode_out = rotor_encode_out
         return self.rotor_encode_out
 
@@ -271,6 +259,7 @@ class enigma:
 
 if __name__ == "__main__":
     machine = enigma()
-    x = machine.ring_settings(machine.rotors[0][0], 'B')
-    print(sorted(x[0].items()))
-    print(sorted(x[1].items()))
+    print(machine.encode())
+    # x = machine.ring_settings(machine.rotors[2][0], 'B')
+    # print(sorted(x[0].items()))
+    # print(sorted(x[1].items()))

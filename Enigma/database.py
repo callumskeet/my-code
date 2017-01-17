@@ -1,15 +1,18 @@
+#!python3
 import string
 import os
 import json
 
 
-# credit to reddit user /u/tangerinelion 
+# credit to reddit user /u/tangerinelion
 def read_json(folder, file_name, subdir=''):
     file_path = os.path.join('data', folder, subdir, file_name)
     with open(file_path, 'r', encoding='utf-8') as f:
         return json.load(f)
 
-def make_db(pardir, subdir, database={}):
+
+def make_db(pardir, subdir):
+    database = {}
     for root, dirs, files in os.walk(pardir):
         if root == pardir:
             for folder in dirs:
@@ -19,7 +22,8 @@ def make_db(pardir, subdir, database={}):
             for file in files:
                 if os.path.join(model, subdir) in root:
                     reflector = file.split('.')[0]
-                    database[model][subdir].setdefault(reflector, read_json(model, file, subdir))
+                    database[model][subdir].setdefault(
+                        reflector, read_json(model, file, subdir))
                 elif model in root:
                     rotor = file.split('.')[0]
                     database[model].setdefault(rotor, read_json(model, file))
