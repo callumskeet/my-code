@@ -1,18 +1,13 @@
-#!python3
-import string
-import os
 import json
+import os
 
 
-# credit to reddit user /u/tangerinelion
 def read_json(folder, file_name, subdir=''):
     file_path = os.path.join('data', folder, subdir, file_name)
     with open(file_path, 'r', encoding='utf-8') as f:
         return json.load(f)
 
-
-def make_db(root, subdir):
-    database = {}
+def array_convert(root, subdir):
     for path, folders, files in os.walk(root):
         if path == root:
             for folder in folders:
@@ -21,18 +16,10 @@ def make_db(root, subdir):
             database[model].setdefault(subdir, {})
             for file in files:
                 if os.path.join(model, subdir) in path:
-                    rotor = read_json(model, file, subdir)
-                    database[model].update(rotor)
+                    reflector = file.split('.')[0]
+                    database[model][subdir].setdefault(
+                        reflector, read_json(model, file, subdir))
                 elif model in path:
-                    rotor = read_json(model, file)
-                    database[model].update(rotor)
+                    rotor = file.split('.')[0]
+                    database[model].setdefault(rotor, read_json(model, file))
     return database
-
-
-# Alphabet
-ab_list = list(string.ascii_uppercase)
-rev_ab_list = list(string.ascii_uppercase)
-rev_ab_list.reverse()
-
-# Rotor database
-database = make_db('data', 'reflectors')
