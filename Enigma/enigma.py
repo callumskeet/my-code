@@ -24,15 +24,26 @@ class enigma:
 
         setting = input('Customise configuration? (Y/N): ').lower()
         if setting.startswith('y'):
+            self.model = self.select_model()
             self.rings = self.ring_settings()
             self.ground = self.ground_settings()
             self.rotors = self.rotor_settings()
             self.plugboard = self.plugboard_settings()
         else:
+            self.model = self.select_model(True)
             self.rings = self.ring_settings(True)
             self.ground = self.ground_settings(True)
             self.rotors = self.rotor_settings(True)
             self.plugboard = self.plugboard_settings(True)
+
+    def select_model(self, defaults=None):
+        if defaults:
+            model = self.rotor_database['M3']
+        else:
+            models = list(self.rotor_database.keys())
+            print('Select model: %s' % ', '.join(models))
+            model = self.rotor_database[input().title()]
+        return model
 
     def ring_settings(self, defaults=None):
         """
@@ -96,12 +107,8 @@ class enigma:
                       self.rotor_database['M3']['reflectors']['B'])
 
         else:
-            models = list(self.rotor_database.keys())
-
-            print('Select model: %s' % ', '.join(models))
-            model = input().title()
-            rotors = self.rotor_database[model]
-            reflectors = rotors['reflectors']
+            rotors = self.model
+            reflectors = self.model['reflectors']
 
             print('Input rotor selection: '
                   '%s' % ', '.join(sorted(rotors.keys())))
@@ -219,6 +226,9 @@ class enigma:
         middle -= self.rings[1]
         right -= self.rings[2]
 
+        for i in left, middle, right:
+            i %= 26
+
         # Encode character
         # Subtraction accounts for the previous rotor's rotation
         # relative to the rotor being used.
@@ -238,8 +248,7 @@ class enigma:
         r_rotor_out = self.rotor_io(
             m_rotor_out, right - middle, rf_r_rotor)
 
-        rotor_encode_out = self.ab_list[
-            self.ab_list.index(r_rotor_out) - right]
+        rotor_encode_out = self.rotor_io(r_rotor_out, -right, self.ab_list)
         return rotor_encode_out
 
     def ch_input(self):
