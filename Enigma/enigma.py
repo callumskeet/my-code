@@ -279,4 +279,5 @@ class enigma:
 
 if __name__ == "__main__":
     machine = enigma()
-    print(machine.encode())
+    while True:
+        print(machine.encode())

@@ -15,7 +15,7 @@ def inverseFactorial(product):
         if x % i >= 1:
             print(str(product) + '  NONE')
             break
-        x = x // i  # '//' ensures the number is stored at full precision
+        x = x // i  # floor division ensures the number is stored at full precision
         i += 1
         if x == 1.0:
             print(str(product) + ' = ' + str(i - 1) + '!')

@@ -28,6 +28,6 @@ class pascal:
 
 
 if __name__ == "__main__":
-    x = pascal(49)
+    x = pascal(19)
     print(x.row())
     print(x.aks_test())
